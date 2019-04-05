@@ -1,0 +1,7 @@
+{{define "ticket_row"}}<tr>
+          <td><span style="color: green;">&bull;</span> <a href="/t/{{.Number}}/" title="Show more information about {{.Number}}">{{.Title}}</a></td>
+          <td><a href="/c/{{.Customer.ID}}/" title="Show more information about {{.Customer.Name}}">{{.Customer.Name}}</a></td>
+          <td><a title="Time since the ticket was opened">{{.CreatedAgeLabel}}</a></td>
+          <td><a title="Time until the ticket breaks SLA or it's expected end date">{{.EndsAtShortLabel}}</a></td>
+          <td>{{if .IsUrgent}}Important!{{end}}</td>
+        </tr>{{end}}

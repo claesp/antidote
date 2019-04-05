@@ -1,0 +1,8 @@
+{{define "content"}}<h1><a href="/" title="Antidote">Antidote</a></h1>
+    <h2>Nätdrift operations (Stockholm)</h2>{{if .HasTickets}}
+    <p>Here you'll find all the open tickets assigned to this group.</p>
+    <h3>Open</h3>
+    <table>{{range .Tickets}}
+      {{template "ticket_row" .}}{{end}}
+    </table>{{else}}
+    <p>There is no open tickets available. Yay!</p>{{end}}{{end}}
