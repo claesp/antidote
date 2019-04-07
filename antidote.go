@@ -21,7 +21,10 @@ func index(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
 		Groups: []libticket.TicketGroup{
 			libticket.TicketGroup{
 				ID:   1,
-				Name: "Nätdrift operation (Stockholm)"}}}
+				Name: "Nätdrift operation (Stockholm)"},
+			libticket.TicketGroup{
+				ID:   2,
+				Name: "Nätdrift utveckling (Uppsala)"}}}
 	ip := &templates.IndexPage{User: u}
 	ctx.SetContentType("text/html;charset=utf-8")
 	templates.WritePageTemplate(ctx, ip)
