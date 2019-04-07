@@ -1,42 +1,35 @@
 package main
 
 import (
-	"html/template"
 	"log"
-	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"./templates"
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttprouter"
 )
 
-type Page struct {
-	Title string
+func cssAntidote(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
+	ctx.SetContentType("text/css")
+	templates.WriteCssAntidote(ctx)
 }
 
-type RootIndexPage struct {
-	Page
-}
-
-func rootIndexHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	tmpl := template.Must(template.ParseGlob("templates/*.html"))
-	tmpl = template.Must(tmpl.ParseFiles("templates/root/index.html"))
-
-	rootIndex := RootIndexPage{Page: Page{Title: "Home"}}
-
-	tmpl.ExecuteTemplate(w, "layout", rootIndex)
+func index(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
+	ip := &templates.IndexPage{}
+	ctx.SetContentType("text/html;charset=utf-8")
+	templates.WritePageTemplate(ctx, ip)
 }
 
 func main() {
 	log.Println("antidote v.0.1")
 
-	r := httprouter.New()
-	r.ServeFiles("/css/*filepath", http.Dir("lib/css"))
+	router := fasthttprouter.New()
+	router.GET("/", index)
+	router.GET("/css/antidote.css", cssAntidote)
+	router.GET("/u/:id/open/", userOpen)
+	router.GET("/g/:id/open/", groupOpen)
+	router.GET("/t/:id/", ticketView)
+	router.GET("/q/", searchIndex)
+	router.GET("/a/", adminIndex)
 
-	r.GET("/", rootIndexHandler)
-	r.GET("/u/:id/open/", userOpenHandler)
-	r.GET("/g/:id/open/", groupOpenHandler)
-	r.GET("/t/:id/", ticketViewHandler)
-	r.GET("/q/", searchIndexHandler)
-	r.GET("/a/", adminIndexHandler)
-
-	log.Fatalln(http.ListenAndServe(":8080", r))
+	log.Fatalln(fasthttp.ListenAndServe(":8080", router.Handler))
 }

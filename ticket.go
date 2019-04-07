@@ -1,273 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"html/template"
-	"net/http"
 	"time"
 
-	humanize "github.com/dustin/go-humanize"
-	"github.com/julienschmidt/httprouter"
+	"./templates"
+
+	"github.com/claesp/antidote/libticket"
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttprouter"
 )
 
-type TicketContact struct {
-	ID    int
-	Email string
-	Name  string
-	Phone string
-}
-
-func (tc TicketContact) HasEmail() bool {
-	return len(tc.Email) > 0
-}
-
-func (tc TicketContact) HasPhone() bool {
-	return len(tc.Phone) > 0
-}
-
-type TicketCustomer struct {
-	ID   int
-	Name string
-}
-
-type TicketUser struct {
-	ID     int
-	Name   string
-	Email  string
-	Groups []TicketGroup
-}
-
-func (tu TicketUser) PrimaryGroup() TicketGroup {
-	return tu.Groups[0]
-}
-
-type TicketGroup struct {
-	ID      int
-	Name    string
-	Members []TicketUser
-}
-
-type TicketWorklog struct {
-	ID      int
-	Worklog string
-	User    TicketUser
-	Created time.Time
-}
-
-func (tw TicketWorklog) CreatedAge() time.Duration {
-	return time.Since(tw.Created)
-}
-
-func (tw TicketWorklog) CreatedAgeLabel() string {
-	return humanize.Time(tw.Created)
-}
-
-type TicketAssignee struct {
-	User  TicketUser
-	Group TicketGroup
-}
-
-type TicketStatus int
-
-const (
-	TicketStatusNew TicketStatus = iota
-	TicketStatusInProgress
-	TicketStatusPending
-	TicketStatusCompleted
-	TicketStatusRejected
-)
-
-func (ts TicketStatus) String() string {
-	switch ts {
-	case TicketStatusNew:
-		return "new"
-	case TicketStatusInProgress:
-		return "in progress"
-	case TicketStatusPending:
-		return "pending"
-	case TicketStatusCompleted:
-		return "completed"
-	case TicketStatusRejected:
-		return "rejected"
-	default:
-		return "unknown"
-	}
-}
-
-func (ts TicketStatus) IsOpen() bool {
-	switch ts {
-	case TicketStatusNew:
-		fallthrough
-	case TicketStatusInProgress:
-		return true
-	default:
-		return false
-	}
-}
-
-func (ts TicketStatus) IsPaused() bool {
-	switch ts {
-	case TicketStatusPending:
-		return true
-	default:
-		return false
-	}
-}
-
-type TicketType int
-
-const (
-	TicketTypeIncident TicketType = iota
-	TicketTypeWorkorder
-	TicketTypeProblem
-	TicketTypeChange
-	TicketTypeTask
-)
-
-func (tt TicketType) String() string {
-	switch tt {
-	case TicketTypeIncident:
-		return "incident"
-	case TicketTypeWorkorder:
-		return "work order"
-	case TicketTypeProblem:
-		return "problem"
-	case TicketTypeChange:
-		return "change"
-	case TicketTypeTask:
-		return "task"
-	default:
-		return "unknown"
-	}
-}
-
-type TicketPriority int
-
-const (
-	TicketPriorityLow TicketPriority = iota
-	TicketPriorityMedium
-	TicketPriorityHigh
-	TicketPriorityUrgent
-)
-
-func (tp TicketPriority) String() string {
-	switch tp {
-	case TicketPriorityLow:
-		return "low"
-	case TicketPriorityMedium:
-		return "medium"
-	case TicketPriorityHigh:
-		return "high"
-	case TicketPriorityUrgent:
-		return "urgent"
-	default:
-		return "unknown"
-	}
-}
-
-type TicketImpact int
-
-const (
-	TicketImpactLow TicketImpact = iota
-	TicketImpactMedium
-	TicketImpactHigh
-)
-
-func (ti TicketImpact) String() string {
-	switch ti {
-	case TicketImpactLow:
-		return "low"
-	case TicketImpactMedium:
-		return "medium"
-	case TicketImpactHigh:
-		return "high"
-	default:
-		return "unknown"
-	}
-}
-
-type Ticket struct {
-	Number      string
-	Title       string
-	Description string
-	Contact     TicketContact
-	Customer    TicketCustomer
-	Created     time.Time
-	Ends        time.Time
-	Worklogs    []TicketWorklog
-	Category    string
-	Service     string
-	Status      TicketStatus
-	Priority    TicketPriority
-	Impact      TicketImpact
-	Type        TicketType
-	Assignee    TicketAssignee
-}
-
-func (t Ticket) CreatedAge() time.Duration {
-	return time.Since(t.Created)
-}
-
-func (t Ticket) EndsAt() time.Duration {
-	return time.Until(t.Ends)
-}
-
-type TicketView struct {
-	Ticket
-}
-
-func (tv TicketView) CreatedAgeLabel() string {
-	if tv.Ticket.CreatedAge() < (1 * time.Minute) {
-		return "moments ago"
-	}
-
-	return humanize.Time(tv.Ticket.Created)
-}
-
-func (tv TicketView) EndsAtLabel() string {
-	if tv.Ticket.EndsAt() > 0 {
-		if tv.Ticket.EndsAt() < (1 * time.Minute) {
-			return "expires shortly"
-		} else if tv.Ticket.EndsAt() == 0 {
-			return "expired now"
-		} else {
-			s := fmt.Sprintf("expires in %s", humanize.RelTime(time.Now(), tv.Ticket.Ends, "", ""))
-			return s[:len(s)-1]
-		}
-	} else {
-		return fmt.Sprintf("expired %s", humanize.Time(tv.Ticket.Ends))
-	}
-}
-
-func (tv TicketView) EndsAtShortLabel() string {
-	if tv.Ticket.EndsAt() > 0 {
-		s := fmt.Sprintf("%s", humanize.RelTime(time.Now(), tv.Ticket.Ends, "", ""))
-		return s[:len(s)-1]
-	} else {
-		return humanize.Time(tv.Ticket.Ends)
-	}
-}
-
-func (tv TicketView) PriorityLabel() string {
-	if tv.Priority == TicketPriorityUrgent {
-		return "urgent"
-	}
-
-	return fmt.Sprintf("%s urgency", tv.Priority)
-}
-
-func (tv TicketView) IsUrgent() bool {
-	return tv.Priority == TicketPriorityUrgent
-}
-
-type TicketViewPage struct {
-	Page
-	Ticket TicketView
-}
-
-func ticketViewHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tmpl := template.Must(template.ParseGlob("templates/*.html"))
-	tmpl = template.Must(tmpl.ParseFiles("templates/ticket/view.html"))
+func ticketView(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
 
 	id := ps.ByName("id")
 	loc, loc_err := time.LoadLocation("Europe/Stockholm")
@@ -290,58 +33,58 @@ func ticketViewHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 	if w2t_err != nil {
 		worklog2_time = time.Now()
 	}
-	ticket := Ticket{
+	ticket := libticket.Ticket{
 		Number:      id,
 		Title:       "Firewall changes",
 		Description: "We need help with our firewall configuration. We need to open access for traffic between the 83.25.152.12 and 94.235.13.52 endpoints, on the following ports: tcp/80, tcp/443. Thanks in advance for your help!",
-		Contact: TicketContact{
+		Contact: libticket.TicketContact{
 			ID:    1,
 			Name:  "Anders Andersson",
 			Email: "anders@example.com",
 			Phone: "+46850650212"},
-		Customer: TicketCustomer{
+		Customer: libticket.TicketCustomer{
 			ID:   2,
 			Name: "Demoföretaget AB"},
 		Created: ticket_created,
 		Ends:    ticket_ends,
-		Worklogs: []TicketWorklog{
-			TicketWorklog{
+		Worklogs: []libticket.TicketWorklog{
+			libticket.TicketWorklog{
 				ID:      1,
 				Worklog: "Will start investigating this. Reports back later.",
 				Created: worklog1_time,
-				User: TicketUser{
+				User: libticket.TicketUser{
 					ID:    1,
 					Name:  "Claes Persson",
 					Email: "claes.persson@ip-only.se",
-					Groups: []TicketGroup{
-						TicketGroup{
+					Groups: []libticket.TicketGroup{
+						libticket.TicketGroup{
 							ID:   1,
 							Name: "Nätdrift operations (Stockholm)"}}}},
-			TicketWorklog{
+			libticket.TicketWorklog{
 				ID:      2,
 				Worklog: "Having some issues with the configuration. Will try and contact end-user.",
 				Created: worklog2_time,
-				User: TicketUser{
+				User: libticket.TicketUser{
 					ID:    1,
 					Name:  "Claes Persson",
 					Email: "claes.persson@ip-only.se",
-					Groups: []TicketGroup{
-						TicketGroup{
+					Groups: []libticket.TicketGroup{
+						libticket.TicketGroup{
 							ID:   1,
 							Name: "Nätdrift operations (Stockholm)"}}}}},
 		Category: "Communications",
 		Service:  "Managed Firewalls",
-		Status:   TicketStatusInProgress,
-		Priority: TicketPriorityMedium,
-		Impact:   TicketImpactLow,
-		Type:     TicketTypeChange,
-		Assignee: TicketAssignee{
-			Group: TicketGroup{
+		Status:   libticket.TicketStatusInProgress,
+		Priority: libticket.TicketPriorityMedium,
+		Impact:   libticket.TicketImpactLow,
+		Type:     libticket.TicketTypeChange,
+		Assignee: libticket.TicketAssignee{
+			Group: libticket.TicketGroup{
 				ID:   3,
 				Name: "Managed Services"}}}
 
-	tv := TicketView{Ticket: ticket}
-	ticketView := TicketViewPage{Page: Page{Title: id}, Ticket: tv}
-
-	tmpl.ExecuteTemplate(w, "layout", ticketView)
+	tv := libticket.TicketView{Ticket: ticket}
+	p := &templates.TicketViewPage{Ticket: tv}
+	ctx.SetContentType("text/html; charset=utf-8")
+	templates.WritePageTemplate(ctx, p)
 }

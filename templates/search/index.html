@@ -1,6 +1,0 @@
-{{define "content"}}<h1><a href="/" title="Antidote">Antidote</a></h1>
-    <h2>Search</h2>{{if .HasTickets}}
-    <table>{{range .Tickets}}
-      {{template "ticket_row" .}}{{end}}
-    </table>{{else}}
-    <p>There is no tickets matching your query.</p>{{end}}{{end}}

@@ -1,23 +1,16 @@
 package main
 
 import (
-	"html/template"
-	"net/http"
 	"time"
 
-	"github.com/julienschmidt/httprouter"
+	"./templates"
+
+	"github.com/claesp/antidote/libticket"
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttprouter"
 )
 
-type UserOpenPage struct {
-	Page
-	HasTickets bool
-	Tickets    []TicketView
-}
-
-func userOpenHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tmpl := template.Must(template.ParseGlob("templates/*.html"))
-	tmpl = template.Must(tmpl.ParseGlob("templates/user/open.html"))
-
+func userOpen(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
 	ticket_created, tc_err := time.Parse("2006-01-02 15:04", "2019-03-28 12:42")
 	if tc_err != nil {
 		ticket_created = time.Now()
@@ -30,43 +23,42 @@ func userOpenHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	if w1t_err != nil {
 		worklog1_time = time.Now()
 	}
-	ticket := Ticket{
+	ticket := libticket.Ticket{
 		Number:      "INC0000556231",
 		Title:       "Firewall changes",
 		Description: "",
-		Contact: TicketContact{
+		Contact: libticket.TicketContact{
 			ID:    1,
 			Name:  "Anders Andersson",
 			Email: "anders@example.com",
 			Phone: "+46850650212"},
-		Customer: TicketCustomer{
+		Customer: libticket.TicketCustomer{
 			ID:   2,
 			Name: "Demoföretaget AB"},
 		Created: ticket_created,
 		Ends:    ticket_ends,
-		Worklogs: []TicketWorklog{
-			TicketWorklog{
+		Worklogs: []libticket.TicketWorklog{
+			libticket.TicketWorklog{
 				ID:      1,
 				Worklog: "Will start investigating this.",
 				Created: worklog1_time,
-				User: TicketUser{
+				User: libticket.TicketUser{
 					ID:    1,
 					Name:  "Claes Persson",
 					Email: "claes.persson@ip-only.se"}}},
 		Category: "Firewalls",
 		Service:  "Data Communications",
-		Status:   TicketStatusInProgress,
-		Priority: TicketPriorityUrgent,
-		Impact:   TicketImpactHigh,
-		Type:     TicketTypeIncident,
-		Assignee: TicketAssignee{
-			Group: TicketGroup{
+		Status:   libticket.TicketStatusInProgress,
+		Priority: libticket.TicketPriorityUrgent,
+		Impact:   libticket.TicketImpactHigh,
+		Type:     libticket.TicketTypeIncident,
+		Assignee: libticket.TicketAssignee{
+			Group: libticket.TicketGroup{
 				ID:   3,
 				Name: "Managed Services"}}}
 
-	tickets := []TicketView{TicketView{ticket}}
-	userOpen := UserOpenPage{Page: Page{Title: "Open"}, Tickets: tickets}
-	userOpen.HasTickets = len(tickets) > 0
-
-	tmpl.ExecuteTemplate(w, "layout", userOpen)
+	tickets := []libticket.TicketView{libticket.TicketView{ticket}}
+	p := &templates.UserOpenPage{Tickets: tickets}
+	ctx.SetContentType("text/html; charset=utf-8")
+	templates.WritePageTemplate(ctx, p)
 }

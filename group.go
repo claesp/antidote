@@ -1,26 +1,14 @@
 package main
 
 import (
-	"html/template"
-	"net/http"
-
-	"github.com/julienschmidt/httprouter"
+	"./templates"
+	"github.com/claesp/antidote/libticket"
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttprouter"
 )
 
-type GroupOpenPage struct {
-	Page
-	HasTickets bool
-	Tickets    []Ticket
-}
-
-func groupOpenHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tmpl := template.Must(template.ParseGlob("templates/*.html"))
-	tmpl = template.Must(tmpl.ParseFiles("templates/group/open.html"))
-
-	tickets := []Ticket{}
-
-	groupOpen := GroupOpenPage{Page: Page{Title: "Open"}, Tickets: tickets}
-	groupOpen.HasTickets = len(tickets) > 0
-
-	tmpl.ExecuteTemplate(w, "layout", groupOpen)
+func groupOpen(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
+	p := &templates.GroupOpenPage{Tickets: []libticket.TicketView{}}
+	ctx.SetContentType("text/html;charset=utf-8")
+	templates.WritePageTemplate(ctx, p)
 }

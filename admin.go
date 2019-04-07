@@ -1,21 +1,13 @@
 package main
 
 import (
-	"html/template"
-	"net/http"
-
-	"github.com/julienschmidt/httprouter"
+	"./templates"
+	"github.com/valyala/fasthttp"
+	"github.com/valyala/fasthttprouter"
 )
 
-type AdminIndexPage struct {
-	Page
-}
-
-func adminIndexHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	tmpl := template.Must(template.ParseGlob("templates/*.html"))
-	tmpl = template.Must(tmpl.ParseFiles("templates/admin/index.html"))
-
-	adminIndex := AdminIndexPage{Page: Page{Title: "Administration"}}
-
-	tmpl.ExecuteTemplate(w, "layout", adminIndex)
+func adminIndex(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
+	p := &templates.AdminIndexPage{}
+	ctx.SetContentType("text/html;charset=utf-8")
+	templates.WritePageTemplate(ctx, p)
 }
