@@ -10,15 +10,11 @@ type IndexPage struct {
     <p>Antidote is an alternative way to view trouble tickets. It won't help you
 much, but it will also try hard to not get in your way.</p>
     {% if p.User.ID != 0 %}<h3>{%s= p.User.Name %}</h3>
-    <ul>
-      <li><a href="/u/{%d= p.User.ID %}/open/" title="Show open tickets for {%s= p.User.Name %}">Open</a></li>
-    </ul>
+    <p><a href="/u/{%d= p.User.ID %}/open/" title="Show open tickets for {%s= p.User.Name %}"><strong>Open</strong></a>, <a href="/u/{%d= p.User.ID %}/paused/" title="Show paused tickets for {%s= p.User.Name %}">Paused</a>, <a href="/u/{%d= p.User.ID %}/closed/" title="Show paused tickets for {%s= p.User.Name %}">Closed</a></p>
     {% if len(p.User.Groups) > 0 %}
     {% for _, g := range p.User.Groups %}
     <h3>{%s= g.Name %}</h3>
-    <ul>
-      <li><a href="/g/{%d= g.ID %}/open/" title="Show open tickets for {%s= g.Name %}">Open</a></li>
-    </ul>
+    <p><a href="/g/{%d= g.ID %}/open/" title="Show open tickets for {%s= g.Name %}"><strong>Open</strong></a>, <a href="/u/{%d= g.ID %}/paused/" title="Show %paused tickets for {%s= g.Name %}">Paused</a>, <a href="/u/{%d= g.ID %}/closed/" title="Show paused tickets for {%s= g.Name %}">Closed</a></p>
     {% endfor %}
     {% endif %}
     {% else %}

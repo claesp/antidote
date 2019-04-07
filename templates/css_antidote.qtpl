@@ -1,8 +1,62 @@
 {% func CssAntidote() %}
+html {
+    overflow-y: scroll;
+}
+
 body {
-    margin-top: 3rem;
-    margin-left: 9rem;
-    margin-bottom: 3rem;
-    margin-right: 12rem;
+    margin: 0.5rem;
+}
+
+body, textarea, input, button {
+	background-color: #fefefe;
+    font-family: "helvetica neue", arial, sans-serif;
+    font-size: 0.7rem;
+    color: #333;
+    line-height: 1.45em;
+}
+
+a:link, a:visited {
+    color: #2562dc;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table th {
+    font-size: 0.6rem;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.badge {
+    border-radius: 0.2rem;
+    font-size: 0.6rem;
+    font-weight: bold;
+    /* top right bottom left */
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    text-transform: uppercase;
+}
+
+.badge-important {
+    color: #fff;
+    background-color: #fe0000;
+}
+
+@media only screen and (min-width: 600px) {
+    body {
+        font-size: 0.8rem;
+        margin: 1rem;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    body {
+        font-size: 0.95rem;
+        margin: 5rem 7rem 2rem 5rem;
+    }
 }
 {% endfunc %}

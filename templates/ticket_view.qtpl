@@ -6,7 +6,7 @@ type TicketViewPage struct {
 %}
 {% func (p *TicketViewPage) Title() %}{%s= p.Ticket.Number %}{% endfunc %}
 {% func (p *TicketViewPage) Body() %}
-    <h2><span style="color: green;">&bull;</span> {%s= p.Ticket.Title %}</h2>
+    <h2><span style="color: green;">&#x258D;</span>{%s= p.Ticket.Title %}{% if p.Ticket.IsUrgent() %} <span class="badge badge-important">Important!</span>{% endif %}</h2>
     <blockquote>
       <p>{%s= p.Ticket.Description %}</p>
     </blockquote>

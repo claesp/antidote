@@ -74,7 +74,7 @@ func ticketView(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
 		Category: "Communications",
 		Service:  "Managed Firewalls",
 		Status:   libticket.TicketStatusInProgress,
-		Priority: libticket.TicketPriorityMedium,
+		Priority: libticket.TicketPriorityUrgent,
 		Impact:   libticket.TicketImpactLow,
 		Type:     libticket.TicketTypeChange,
 		Assignee: libticket.TicketAssignee{
