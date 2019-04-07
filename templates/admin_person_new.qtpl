@@ -1,0 +1,9 @@
+{% code
+type AdminPersonNewPage struct {
+}
+%}
+{% func (p *AdminPersonNewPage) Title() %}Add a person | Administration{% endfunc %}
+{% func (p *AdminPersonNewPage) Body() %}
+    <h2>Administration</h2>
+    <h3>Add a person</h3>
+{% endfunc %}

@@ -1,0 +1,9 @@
+{% code
+type AdminGroupNewPage struct {
+}
+%}
+{% func (p *AdminGroupNewPage) Title() %}Add a group | Administration{% endfunc %}
+{% func (p *AdminGroupNewPage) Body() %}
+    <h2>Administration</h2>
+    <h3>Add a group</h3>
+{% endfunc %}

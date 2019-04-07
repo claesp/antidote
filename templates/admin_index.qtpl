@@ -12,12 +12,12 @@ type AdminIndexPage struct {
     <p>These are the available actions within the administration area.</p>
     <ul>
       <li><a href="/a/customer/new/" title="Add a customer">Add a customer</a></li>
+      <li><a href="/a/group/new/" title="Add a group">Add a group</a></li>
       <li><a href="/a/person/new/" title="Add a person">Add a person</a></li>
       <li><a href="/a/user/new/" title="Add a user">Add a user</a></li>
-      <li><a href="/a/group/new/" title="Add a group">Add a group</a></li>
       <li><a href="/c/" title="List all customers">All customers</a></li>
+      <li><a href="/g/" title="List all groups">All groups</a></li>
       <li><a href="/p/" title="List all people">All people</a></li>
       <li><a href="/u/" title="List all users">All users</a></li>
-      <li><a href="/g/" title="List all groups">All groups</a></li>
     </ul>
 {% endfunc %}

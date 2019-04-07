@@ -1,0 +1,9 @@
+{% code
+type AdminCustomerNewPage struct {
+}
+%}
+{% func (p *AdminCustomerNewPage) Title() %}Add a customer | Administration{% endfunc %}
+{% func (p *AdminCustomerNewPage) Body() %}
+    <h2>Administration</h2>
+    <h3>Add a customer</h3>
+{% endfunc %}

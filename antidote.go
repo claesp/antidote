@@ -38,6 +38,10 @@ func main() {
 	router.GET("/t/:id/", ticketView)
 	router.GET("/q/", searchIndex)
 	router.GET("/a/", adminIndex)
+	router.GET("/a/customer/new/", adminCustomerNew)
+	router.GET("/a/group/new/", adminGroupNew)
+	router.GET("/a/person/new/", adminPersonNew)
+	router.GET("/a/user/new/", adminUserNew)
 
 	log.Fatalln(fasthttp.ListenAndServe(":8080", router.Handler))
 }
