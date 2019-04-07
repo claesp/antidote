@@ -1,0 +1,20 @@
+{% interface
+Page {
+    Title()
+    Body()
+}
+%}
+{% func PageTemplate(p Page) %}<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{%s= p.Title() %} | Antidote</title>
+    <link rel="stylesheet" href="/css/antidote.css">
+  </head>
+
+  <body>
+    <h1><a href="/" title="Antidote">Antidote</a></h1>
+    {%= p.Body() %}
+  </body>
+</html>{% endfunc %}

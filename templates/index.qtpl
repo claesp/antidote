@@ -1,0 +1,22 @@
+{% code
+type IndexPage struct {
+}
+%}
+{% func (p *IndexPage) Title() %}Home{% endfunc %}
+{% func (p *IndexPage) Body() %}
+    <h2>Home</h2>
+    <p>Antidote is an alternative way to view trouble tickets. It won't help you much, but it will also try hard to not get in your way.</p>
+    <h2>Claes Persson</h2>
+    <ul>
+      <li><a href="/u/1/open/" title="Show open tickets for Claes Persson">Open</a></li>
+    </ul>
+    <h2>Nätdrift operations (Stockholm)</h2>
+    <ul>
+      <li><a href="/g/1/open/" title="Show open tickets for Nätdrift operations (Stockholm)">Open</a></li>
+    </ul>
+    <h3>Actions</h3>
+    <ul>
+      <li><a href="/q/" title="Search for a ticket">Search</a></li>
+      <li><a href="/a/" title="Administration">Administration</a></li>
+    </ul>
+{% endfunc %}

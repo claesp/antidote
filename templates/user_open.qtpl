@@ -1,0 +1,27 @@
+{% import "github.com/claesp/antidote/libticket" %}
+{% code
+type UserOpenPage struct {
+    Tickets []libticket.TicketView
+}
+%}
+{% func (p *UserOpenPage) Title() %}Open{% endfunc %}
+{% func (p *UserOpenPage) Body() %}
+    <h2>Claes Persson</h2>
+    <p>Here you'll find all the open tickets assigned to this user.</p>
+    <h3>Open</h3>
+    {% if len(p.Tickets) != 0 %}
+    <table>
+    {% for _, t := range p.Tickets %}
+      <tr>
+        <td><span style="color: green;">&bull;</span> <a href="/t/{%s= t.Number %}/" title="Show more information about {%s= t.Number %}">{%s= t.Title %}</a></td>
+        <td><a href="/c/{%d= t.Customer.ID %}/" title="Show more information about {%s= t.Customer.Name %}">{%s= t.Customer.Name %}</a></td>
+        <td><a title="Time since the ticket was opened">{%s= t.CreatedAgeLabel() %}</a></td>
+        <td><a title="Time until the ticket breaks SLA or it's expected end date">{%s= t.EndsAtShortLabel() %}</a></td>
+        <td>{% if t.IsUrgent() %}Important!{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+    <p>There is no open tickets for this user. Yay!</p>
+    {% endif %}
+{% endfunc %}

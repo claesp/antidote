@@ -1,0 +1,10 @@
+{% code
+type SearchIndexPage struct {
+    Query string
+}
+%}
+{% func (p *SearchIndexPage) Title() %}Search{% endfunc %}
+{% func (p *SearchIndexPage) Body() %}
+    <h2>Search</h2>
+    <p>There is nothing that matches your query.</p>
+{% endfunc %}
