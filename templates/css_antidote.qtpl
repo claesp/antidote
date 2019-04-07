@@ -41,7 +41,32 @@ table th {
     text-transform: uppercase;
 }
 
-.badge-important {
+.fg-ok {
+    color: #00ff00;
+    background-color: transparent;
+}
+
+.fg-warning {
+    color: #fefe00;
+    background-color: transparent;
+}
+
+.fg-danger {
+    color: #ff0000;
+    background-color: transparent;
+}
+
+.bg-ok {
+    color: #fff;
+    background-color: #00ff00;
+}
+
+.bg-warning {
+    color: #fff;
+    background-color: #fefe00;
+}
+
+.bg-danger {
     color: #fff;
     background-color: #fe0000;
 }

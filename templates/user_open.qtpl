@@ -23,11 +23,11 @@ type UserOpenPage struct {
       <tbody>
         {% for _, t := range p.Tickets %}
         <tr>
-          <td><span style="color: green;">&#x258D;</span><a href="/t/{%s= t.Number %}/" title="Show more information about {%s= t.Number %}">{%s= t.Title %}</a></td>
+          <td><span class="fg-warning">&#x258D;</span><a href="/t/{%s= t.Number %}/" title="Show more information about {%s= t.Number %}">{%s= t.Title %}</a></td>
           <td><a href="/c/{%d= t.Customer.ID %}/" title="Show more information about {%s= t.Customer.Name %}">{%s= t.Customer.Name %}</a></td>
           <td><a title="Time since the ticket was opened">{%s= t.CreatedAgeLabel() %}</a></td>
           <td><a title="Time until the ticket breaks SLA or it's expected end date">{%s= t.EndsAtShortLabel() %}</a></td>
-          <td>{% if t.IsUrgent() %}<span class="badge badge-important">Important!</span>{% endif %}</td>
+          <td>{% if t.IsUrgent() %}<span class="badge bg-danger">Important!</span>{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>

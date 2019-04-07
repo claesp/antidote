@@ -6,27 +6,17 @@ type TicketViewPage struct {
 %}
 {% func (p *TicketViewPage) Title() %}{%s= p.Ticket.Number %}{% endfunc %}
 {% func (p *TicketViewPage) Body() %}
-    <h2><span style="color: green;">&#x258D;</span>{%s= p.Ticket.Title %}{% if p.Ticket.IsUrgent() %} <span class="badge badge-important">Important!</span>{% endif %}</h2>
+    <h2><span class="fg-ok">&#x258D;</span>{%s= p.Ticket.Title %}{% if p.Ticket.IsUrgent() %} <span class="badge bg-danger">Important!</span>{% endif %}</h2>
     <blockquote>
       <p>{%s= p.Ticket.Description %}</p>
     </blockquote>
     <p>Reported by <a href="/p/{%d= p.Ticket.Contact.ID %}/" title="Show more information about {%s= p.Ticket.Contact.Name %}">{%s= p.Ticket.Contact.Name %}</a> from <a href="/c/{%d= p.Ticket.Customer.ID %}/" title="Show more information about {%s= p.Ticket.Customer.Name %}">{%s= p.Ticket.Customer.Name %}</a>{% if p.Ticket.Contact.HasEmail() %} who can be reached at <a href="mailto:{%s= p.Ticket.Contact.Email %}?subject=Re: {%s= p.Ticket.Number %}" title="Send a email to {%s= p.Ticket.Contact.Name %}">{%s= p.Ticket.Contact.Email %}</a>{% if p.Ticket.Contact.HasPhone() %} or {%s= p.Ticket.Contact.Phone %}{% endif %}{% elseif p.Ticket.Contact.HasPhone() %} %who can be reached at {%s= p.Ticket.Contact.Phone %}{% endif %}.</p>
     <p>This is a <a title="Ticket is currently {%s= p.Ticket.Status.String() %}">{% if p.Ticket.Status.IsOpen() && !p.Ticket.Status.IsPaused() %}open{% elseif p.Ticket.Status.IsPaused() %}paused{% else %}closed{% endif %}</a> {%s= p.Ticket.Type.String() %} with number {%s= p.Ticket.Number %}. It was opened <a title="{%s= p.Ticket.Created.String() %}">{%s= p.Ticket.CreatedAgeLabel() %}</a> and it <a title="{%s= p.Ticket.Ends.String() %}">{%s= p.Ticket.EndsAtLabel() %}</a>. It is currently assigned to <a href="/g/{%d= p.Ticket.Assignee.Group.ID %}/" title="Show more information about {%s= p.Ticket.Assignee.Group.Name %}">{%s= p.Ticket.Assignee.Group.Name %}</a>.  It was marked as {%s= p.Ticket.PriorityLabel() %} with {%s= p.Ticket.Impact.String() %} impact. The ticket is categorized under {%s= p.Ticket.Category %} / {%s= p.Ticket.Service %}.</p>
     <h3>Worklogs</h3>{% for _, w := range p.Ticket.Worklogs %}
-    <blockquote>
-      <p>{%s= w.Worklog %}</p>
-      <p><a href="/u/{%d= w.User.ID %}/" title="Show more information about {%s= w.User.Name %}">{%s= w.User.Name %}</a> <em>(<a href="/g/{%d= w.User.PrimaryGroup().ID %}/" title="Show more information about {%s= w.User.PrimaryGroup().Name %}">{%s= w.User.PrimaryGroup().Name %}</a>)</em> &mdash; {%s= w.CreatedAgeLabel() %}</p>
-    </blockquote>{% endfor %}
-    <form>
-      <textarea></textarea>
-      <br>
-      <input type="submit" value="Save">
-    </form>
+    <p>{%s= w.Worklog %}</p>
+    <p><a href="/u/{%d= w.User.ID %}/" title="Show more information about {%s= w.User.Name %}">{%s= w.User.Name %}</a> <em>(<a href="/g/{%d= w.User.PrimaryGroup().ID %}/" title="Show more information about {%s= w.User.PrimaryGroup().Name %}">{%s= w.User.PrimaryGroup().Name %}</a>)</em> &mdash; {%s= w.CreatedAgeLabel() %}</p>{% endfor %}
     <h3>Actions</h3>
-    <ul>
-      <li><a href="/t/{%s= p.Ticket.Number %}/pause/" title="Pause this ticket">Pause</a></li>
-      <li><a href="/t/{%s= p.Ticket.Number %}/assign/?u=1" title="Assign this ticket to me">Assign to me</a></li>
-      <li><a href="/t/{%s= p.Ticket.Number %}/assign/" title="Assign this ticket">Assign</a></li>
-      <li><a href="/t/{%s= p.Ticket.Number %}/close/" title="Close this ticket">Close</a></li>
-    </ul>
+    <p><a href="/t/{%s= p.Ticket.Number %}/update/" title="Update this ticket"><strong>Update</strong></a>{% if p.Ticket.Status.IsOpen() %}{% if p.Ticket.Status.IsPaused() %}, <a href="/t/{%s= p.Ticket.Number %}/unpause/" title="Pause this ticket"><strong>Unpause</strong></a>{% else %}, <a href="/t/{%s= p.Ticket.Number %}/pause/" title="Pause this ticket">Pause</a>{% endif %}, <a href="/t/{%s= p.Ticket.Number %}/assign/?u=1" title="Assign this ticket to me"><strong>Assign to me</strong></a>, <a href="/t/{%s= p.Ticket.Number %}/assign/" title="Assign this ticket">Assign</a> or <a href="/t/{%s= p.Ticket.Number %}/close/" title="Close this ticket"><strong>Close</strong></a></p>
+      {% endif %}
+    </p>
 {% endfunc %}
