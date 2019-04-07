@@ -11,15 +11,15 @@ import (
 )
 
 func userOpen(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
-	ticket_created, tc_err := time.Parse("2006-01-02 15:04", "2019-03-28 12:42")
+	ticket_created, tc_err := time.Parse("2006-01-02 15:04", "2019-04-06 12:42")
 	if tc_err != nil {
 		ticket_created = time.Now()
 	}
-	ticket_ends, te_err := time.Parse("2006-01-02 15:04", "2019-03-30 19:55")
+	ticket_ends, te_err := time.Parse("2006-01-02 15:04", "2019-04-08 12:42")
 	if te_err != nil {
 		ticket_ends = time.Now()
 	}
-	worklog1_time, w1t_err := time.Parse("2006-01-02 15:04", "2019-03-28 14:34")
+	worklog1_time, w1t_err := time.Parse("2006-01-02 15:04", "2019-04-07 14:34")
 	if w1t_err != nil {
 		worklog1_time = time.Now()
 	}

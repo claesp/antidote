@@ -11,25 +11,24 @@ import (
 )
 
 func ticketView(ctx *fasthttp.RequestCtx, ps fasthttprouter.Params) {
-
 	id := ps.ByName("id")
 	loc, loc_err := time.LoadLocation("Europe/Stockholm")
 	if loc_err != nil {
 		panic(loc_err)
 	}
-	ticket_created, tc_err := time.ParseInLocation("2006-01-02 15:04", "2019-02-28 12:42", loc)
+	ticket_created, tc_err := time.ParseInLocation("2006-01-02 15:04", "2019-04-06 12:42", loc)
 	if tc_err != nil {
 		ticket_created = time.Now()
 	}
-	ticket_ends, te_err := time.ParseInLocation("2006-01-02 15:04", "2019-03-30 20:06", loc)
+	ticket_ends, te_err := time.ParseInLocation("2006-01-02 15:04", "2019-04-08 12:42", loc)
 	if te_err != nil {
 		ticket_ends = time.Now()
 	}
-	worklog1_time, w1t_err := time.ParseInLocation("2006-01-02 15:04", "2019-03-28 14:34", loc)
+	worklog1_time, w1t_err := time.ParseInLocation("2006-01-02 15:04", "2019-04-07 05:34", loc)
 	if w1t_err != nil {
 		worklog1_time = time.Now()
 	}
-	worklog2_time, w2t_err := time.ParseInLocation("2006-01-02 15:04", "2019-03-30 02:15", loc)
+	worklog2_time, w2t_err := time.ParseInLocation("2006-01-02 15:04", "2019-04-07 02:15", loc)
 	if w2t_err != nil {
 		worklog2_time = time.Now()
 	}
