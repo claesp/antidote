@@ -1,5 +1,4 @@
-{% func CssAntidote() %}
-html {
+{% func CssAntidote() %}html {
     overflow-y: scroll;
 }
 
@@ -8,7 +7,7 @@ body {
 }
 
 body, textarea, input, button {
-	background-color: #fefefe;
+    background-color: #fefefe;
     font-family: "helvetica neue", arial, sans-serif;
     font-size: 0.7rem;
     color: #333;
@@ -85,9 +84,8 @@ table th {
     }
 }
 
-@media only screen and (min-width: 1900px) {
+@media only screen and (min-width: 2000px) {
     body {
         font-size: 1.5rem;
     }
-}
-{% endfunc %}
+}{% endfunc %}
