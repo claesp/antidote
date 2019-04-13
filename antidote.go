@@ -5,8 +5,13 @@ import (
 
 	"./templates"
 	"github.com/claesp/antidote/libticket"
+	"github.com/claesp/antidote/libticket/drivers"
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttprouter"
+)
+
+var (
+	TicketDB libticket.TicketDB = libticket.TicketDB{}
 )
 
 func cssAntidote(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
@@ -45,6 +50,12 @@ func main() {
 	router.GET("/a/group/new/", adminGroupNew)
 	router.GET("/a/person/new/", adminPersonNew)
 	router.GET("/a/user/new/", adminUserNew)
+
+	TicketDB.Register("boltdb", &drivers.TicketDriverBoltDB{})
+	conn, _ := TicketDB.Connect()
+	log.Println(conn)
+	log.Println(TicketDB)
+	log.Println(TicketDB.CurrentDriver.Info())
 
 	log.Fatalln(fasthttp.ListenAndServe(":8080", router.Handler))
 }
