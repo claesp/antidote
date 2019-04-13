@@ -20,16 +20,22 @@ func cssAntidote(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
 }
 
 func index(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
-	u := libticket.TicketUser{
-		ID:   1,
-		Name: "Claes Persson",
-		Groups: []libticket.TicketGroup{
-			libticket.TicketGroup{
-				ID:   1,
-				Name: "Nätdrift operation (Stockholm)"},
-			libticket.TicketGroup{
-				ID:   2,
-				Name: "Nätdrift utveckling (Uppsala)"}}}
+	var u libticket.TicketUser
+	user, err := TicketDB.GetUser(1)
+	if err != nil {
+		u = libticket.TicketUser{
+			ID:   1,
+			Name: "Claes Persson",
+			Groups: []libticket.TicketGroup{
+				libticket.TicketGroup{
+					ID:   1,
+					Name: "Nätdrift operation (Stockholm)"},
+				libticket.TicketGroup{
+					ID:   2,
+					Name: "Nätdrift utveckling (Uppsala)"}}}
+	} else {
+		u = user
+	}
 	ip := &templates.IndexPage{User: u}
 	ctx.SetContentType("text/html;charset=utf-8")
 	templates.WritePageTemplate(ctx, ip)
@@ -51,11 +57,12 @@ func main() {
 	router.GET("/a/person/new/", adminPersonNew)
 	router.GET("/a/user/new/", adminUserNew)
 
-	TicketDB.Register("boltdb", &drivers.TicketDriverBoltDB{})
+	TicketDB.Register("bbolt", &drivers.TicketDriverBbolt{})
 	conn_err := TicketDB.Connect()
 	if conn_err != nil {
 		log.Fatalln(conn_err)
 	}
+	defer TicketDB.Disconnect()
 
 	log.Fatalln(fasthttp.ListenAndServe(":8080", router.Handler))
 }
