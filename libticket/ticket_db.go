@@ -7,7 +7,7 @@ type TicketDB struct {
 	CurrentDriver     drivers.Driver
 }
 
-func (tdb *TicketDB) Connect() (bool, error) {
+func (tdb *TicketDB) Connect() error {
 	return tdb.CurrentDriver.Connect()
 }
 

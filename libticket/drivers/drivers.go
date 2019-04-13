@@ -1,6 +1,6 @@
 package drivers
 
 type Driver interface {
-	Connect() (bool, error)
+	Connect() error
 	Info() string
 }

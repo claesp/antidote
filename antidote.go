@@ -52,10 +52,10 @@ func main() {
 	router.GET("/a/user/new/", adminUserNew)
 
 	TicketDB.Register("boltdb", &drivers.TicketDriverBoltDB{})
-	conn, _ := TicketDB.Connect()
-	log.Println(conn)
-	log.Println(TicketDB)
-	log.Println(TicketDB.CurrentDriver.Info())
+	conn_err := TicketDB.Connect()
+	if conn_err != nil {
+		log.Fatalln(conn_err)
+	}
 
 	log.Fatalln(fasthttp.ListenAndServe(":8080", router.Handler))
 }

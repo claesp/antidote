@@ -13,8 +13,8 @@ var (
 type TicketDriverBoltDB struct {
 }
 
-func (td *TicketDriverBoltDB) Connect() (bool, error) {
-	return false, errors.New("Not implemented")
+func (td *TicketDriverBoltDB) Connect() error {
+	return errors.New("Not implemented")
 }
 
 func (td *TicketDriverBoltDB) Info() string {
