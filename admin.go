@@ -30,6 +30,10 @@ func adminPersonNew(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
 	templates.WritePageTemplate(ctx, p)
 }
 
+func adminUserCreate(ctx *fasthttp.RequestCtx, p fasthttprouter.Params) {
+
+}
+
 func adminUserNew(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
 	p := &templates.AdminUserNewPage{}
 	ctx.SetContentType("text/html;charset=utf-8")

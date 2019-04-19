@@ -6,4 +6,29 @@ type AdminUserNewPage struct {
 {% func (p *AdminUserNewPage) Body() %}
     <h2>Administration</h2>
     <h3>Add a user</h3>
+    <form method="post" action="/a/user/new/">
+        <p>
+            <label for="fname">Firstname</label>
+            <br>
+            <input type="text" name="fname">
+        </p>
+        <p>
+            <label for="lname">Lastname</label>
+            <br>
+            <input type="text" name="lname">
+        </p>
+        <p>
+            <label for="username">Username</label>
+            <br>
+            <input type="text" name="username">
+        </p>
+        <p>
+            <label for="password">Password</label>
+            <br>
+            <input type="text" name="password">
+        </p>
+        <p>
+            <input type="submit" value="Save">
+        </p>
+    </form>
 {% endfunc %}

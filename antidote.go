@@ -56,6 +56,7 @@ func main() {
 	router.GET("/a/group/new/", adminGroupNew)
 	router.GET("/a/person/new/", adminPersonNew)
 	router.GET("/a/user/new/", adminUserNew)
+	router.POST("/a/user/new/", adminUserCreate)
 
 	TicketDB.Register("bbolt", &drivers.TicketDriverBbolt{})
 	conn_err := TicketDB.Connect()
