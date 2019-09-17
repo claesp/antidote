@@ -29,10 +29,10 @@ func index(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
 			Groups: []libticket.TicketGroup{
 				libticket.TicketGroup{
 					ID:   1,
-					Name: "Nätdrift operation (Stockholm)"},
+					Name: "Active Network Services Operation (Stockholm)"},
 				libticket.TicketGroup{
 					ID:   2,
-					Name: "Nätdrift utveckling (Uppsala)"}}}
+					Name: "Active Network Services Utveckling (Uppsala)"}}}
 	} else {
 		u = user
 	}
@@ -65,5 +65,6 @@ func main() {
 	}
 	defer TicketDB.Disconnect()
 
+	log.Println(TicketDB.Info())
 	log.Fatalln(fasthttp.ListenAndServe(":8080", router.Handler))
 }

@@ -31,6 +31,10 @@ func (tdb *TicketDB) GetUser(id int) (TicketUser, error) {
 	return user, nil
 }
 
+func (tdb *TicketDB) Info() string {
+	return tdb.CurrentDriver.Info()
+}
+
 func (tdb *TicketDB) Register(name string, driver drivers.Driver) {
 	tdb.CurrentDriverName = name
 	tdb.CurrentDriver = driver

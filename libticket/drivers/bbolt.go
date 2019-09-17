@@ -1,7 +1,6 @@
 package drivers
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -15,10 +14,6 @@ var (
 
 type TicketDriverBbolt struct {
 	DB *bolt.DB
-}
-
-func (td *TicketDriverBbolt) AddUser(user User) error {
-	return errors.New("bbolt: Not implemented")
 }
 
 func (td *TicketDriverBbolt) Connect() error {
@@ -38,12 +33,6 @@ func (td *TicketDriverBbolt) Disconnect() error {
 	td.DB.Close()
 
 	return nil
-}
-
-func (td *TicketDriverBbolt) GetUser(id int) (User, error) {
-	log.Println("bbolt: Get user")
-	/*return User{ID: id}, nil*/
-	return User{}, errors.New("bbolt: Not implemented")
 }
 
 func (td *TicketDriverBbolt) Info() string {
