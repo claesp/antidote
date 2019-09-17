@@ -17,6 +17,10 @@ type TicketDriverBbolt struct {
 	DB *bolt.DB
 }
 
+func (td *TicketDriverBbolt) AddUser(user User) error {
+	return errors.New("bbolt: Not implemented")
+}
+
 func (td *TicketDriverBbolt) Connect() error {
 	var err error
 	log.Println("bbolt: Opening database file")
@@ -39,9 +43,9 @@ func (td *TicketDriverBbolt) Disconnect() error {
 func (td *TicketDriverBbolt) GetUser(id int) (User, error) {
 	log.Println("bbolt: Get user")
 	/*return User{ID: id}, nil*/
-	return User{}, errors.New("Not implemented")
+	return User{}, errors.New("bbolt: Not implemented")
 }
 
 func (td *TicketDriverBbolt) Info() string {
-	return fmt.Sprintf("bbolt driver v.%d.%d", Major, Minor)
+	return fmt.Sprintf("bbolt: driver v.%d.%d", Major, Minor)
 }

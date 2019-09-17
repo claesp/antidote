@@ -5,6 +5,7 @@ type User struct {
 }
 
 type Driver interface {
+	AddUser(User) error
 	Connect() error
 	Disconnect() error
 	GetUser(id int) (User, error)
