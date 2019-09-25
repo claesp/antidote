@@ -1,11 +1,16 @@
 package libticket
 
+// TicketPriority marks the priority for the ticket.
 type TicketPriority int
 
 const (
+	// TicketPriorityLow indicates low priority.
 	TicketPriorityLow TicketPriority = iota
+	// TicketPriorityMedium indicates medium priority.
 	TicketPriorityMedium
+	// TicketPriorityHigh indicates high priority.
 	TicketPriorityHigh
+	// TicketPriorityUrgent indicates urgent priority.
 	TicketPriorityUrgent
 )
 

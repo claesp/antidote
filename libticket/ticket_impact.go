@@ -1,10 +1,14 @@
 package libticket
 
+// TicketImpact is the impact ticket has.
 type TicketImpact int
 
 const (
+	// TicketImpactLow indicates low impact.
 	TicketImpactLow TicketImpact = iota
+	// TicketImpactMedium indicates medium impact.
 	TicketImpactMedium
+	// TicketImpactHigh indicates high impact.
 	TicketImpactHigh
 )
 

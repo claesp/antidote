@@ -1,12 +1,18 @@
 package libticket
 
+// TicketType indicates the type of the ticket.
 type TicketType int
 
 const (
+	// TicketTypeIncident indicates that the ticket is a incident.
 	TicketTypeIncident TicketType = iota
+	// TicketTypeWorkorder indicates that the ticket is a workorder.
 	TicketTypeWorkorder
+	// TicketTypeProblem indicates that the ticket is a problem.
 	TicketTypeProblem
+	// TicketTypeChange indicates that the ticket is a change.
 	TicketTypeChange
+	// TicketTypeTask indicates that the ticket is a task.
 	TicketTypeTask
 )
 
