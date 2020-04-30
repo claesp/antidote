@@ -65,5 +65,6 @@ func main() {
 	}
 	defer TicketDB.Disconnect()
 
+	log.Println("listening on :8080")
 	log.Fatalln(fasthttp.ListenAndServe(":8080", router.Handler))
 }
