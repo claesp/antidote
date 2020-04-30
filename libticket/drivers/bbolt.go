@@ -1,7 +1,6 @@
 package drivers
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -9,14 +8,18 @@ import (
 )
 
 var (
-	Major int = 0
-	Minor int = 1
+	// Major version of driver.
+	Major = 0
+	// Minor version of driver.
+	Minor = 1
 )
 
+// TicketDriverBbolt is the default driver structure.
 type TicketDriverBbolt struct {
 	DB *bolt.DB
 }
 
+// Connect connects to the database file.
 func (td *TicketDriverBbolt) Connect() error {
 	var err error
 	log.Println("bbolt: Opening database file")
@@ -29,6 +32,7 @@ func (td *TicketDriverBbolt) Connect() error {
 	return nil
 }
 
+// Disconnect closes the database file.
 func (td *TicketDriverBbolt) Disconnect() error {
 	log.Println("bbolt: Closing database file")
 	td.DB.Close()
@@ -36,12 +40,7 @@ func (td *TicketDriverBbolt) Disconnect() error {
 	return nil
 }
 
-func (td *TicketDriverBbolt) GetUser(id int) (User, error) {
-	log.Println("bbolt: Get user")
-	/*return User{ID: id}, nil*/
-	return User{}, errors.New("Not implemented")
-}
-
+// Info displays the current driver information.
 func (td *TicketDriverBbolt) Info() string {
-	return fmt.Sprintf("bbolt driver v.%d.%d", Major, Minor)
+	return fmt.Sprintf("bbolt: driver v.%d.%d", Major, Minor)
 }

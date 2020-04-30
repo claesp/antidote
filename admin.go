@@ -31,7 +31,6 @@ func adminPersonNew(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
 }
 
 func adminUserCreate(ctx *fasthttp.RequestCtx, p fasthttprouter.Params) {
-
 }
 
 func adminUserNew(ctx *fasthttp.RequestCtx, _ fasthttprouter.Params) {
