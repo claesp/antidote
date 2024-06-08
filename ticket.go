@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"./templates"
+	"github.com/claesp/antidote/templates"
 
 	"github.com/claesp/antidote/libticket"
 	"github.com/valyala/fasthttp"

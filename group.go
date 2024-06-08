@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./templates"
+	"github.com/claesp/antidote/templates"
 	"github.com/claesp/antidote/libticket"
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttprouter"

@@ -1,9 +1,12 @@
+//go:generate go install github.com/valyala/quicktemplate/qtc
+//go:generate qtc -dir=templates
+
 package main
 
 import (
 	"log"
 
-	"./templates"
+	"github.com/claesp/antidote/templates"
 	"github.com/claesp/antidote/libticket"
 	"github.com/claesp/antidote/libticket/drivers"
 	"github.com/valyala/fasthttp"
